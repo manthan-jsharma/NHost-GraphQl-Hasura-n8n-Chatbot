@@ -76,7 +76,7 @@ export function ChatWindow({ chatId }: ChatWindowProps) {
       data?.messages
         .slice()
         .sort(
-          (a, b) =>
+          (a: Message, b: Message) =>
             new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
         ) || [],
     [data?.messages]

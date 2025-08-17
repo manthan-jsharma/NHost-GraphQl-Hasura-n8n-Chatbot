@@ -99,21 +99,332 @@
 //   );
 // }
 
+// "use client";
+
+// import type React from "react";
+// import { useState } from "react";
+// import {
+//   useSignInEmailPassword,
+//   useSignUpEmailPassword,
+//   useResetPassword,
+// } from "@nhost/react";
+// import { Eye, EyeOff, Loader2, Mail, Lock, User } from "lucide-react";
+// import { ThemeToggle } from "./ThemeToggle";
+
+// export function AuthForm() {
+//   const [isSignUp, setIsSignUp] = useState(false);
+//   const [showForgotPassword, setShowForgotPassword] = useState(false);
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [rememberMe, setRememberMe] = useState(true);
+
+//   const {
+//     signInEmailPassword,
+//     isLoading: isSigningIn,
+//     error: signInError,
+//   } = useSignInEmailPassword();
+//   const {
+//     signUpEmailPassword,
+//     isLoading: isSigningUp,
+//     error: signUpError,
+//   } = useSignUpEmailPassword();
+//   const {
+//     resetPassword,
+//     isLoading: isResetting,
+//     error: resetError,
+//     isSuccess: resetSuccess,
+//   } = useResetPassword();
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault();
+
+//     if (showForgotPassword) {
+//       await resetPassword(email);
+//       return;
+//     }
+
+//     if (isSignUp) {
+//       await signUpEmailPassword(email, password);
+//     } else {
+//       await signInEmailPassword(email, password, { rememberMe });
+//     }
+//   };
+
+//   const isLoading = isSigningIn || isSigningUp || isResetting;
+//   const error = signInError || signUpError || resetError;
+
+//   const getErrorMessage = (error: any) => {
+//     if (!error) return null;
+
+//     const message = error.message || error.error || "An error occurred";
+
+//     // Convert technical errors to user-friendly messages
+//     if (message.includes("Invalid email or password")) {
+//       return "The email or password you entered is incorrect. Please try again.";
+//     }
+//     if (message.includes("User already registered")) {
+//       return "An account with this email already exists. Try signing in instead.";
+//     }
+//     if (message.includes("Email not verified")) {
+//       return "Please check your email and click the verification link before signing in.";
+//     }
+//     if (message.includes("Too many requests")) {
+//       return "Too many attempts. Please wait a few minutes before trying again.";
+//     }
+
+//     return message;
+//   };
+
+//   if (showForgotPassword) {
+//     return (
+//       <div className="min-h-screen flex items-center justify-center bg-background">
+//         <div className="absolute top-4 right-4">
+//           <ThemeToggle />
+//         </div>
+//         <div className="max-w-md w-full space-y-8 bg-card p-8 rounded-xl shadow-lg border">
+//           <div className="text-center">
+//             <div className="mx-auto h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center">
+//               <Mail className="h-6 w-6 text-primary" />
+//             </div>
+//             <h2 className="mt-4 text-2xl font-bold text-foreground">
+//               Reset your password
+//             </h2>
+//             <p className="mt-2 text-sm text-muted-foreground">
+//               Enter your email address and we'll send you a link to reset your
+//               password.
+//             </p>
+//           </div>
+
+//           {resetSuccess ? (
+//             <div className="text-center space-y-4">
+//               <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+//                 <p className="text-green-800 dark:text-green-200">
+//                   Password reset email sent! Check your inbox.
+//                 </p>
+//               </div>
+//               <button
+//                 type="button"
+//                 className="text-primary hover:text-primary/80 font-medium"
+//                 onClick={() => setShowForgotPassword(false)}
+//               >
+//                 Back to sign in
+//               </button>
+//             </div>
+//           ) : (
+//             <form className="space-y-6" onSubmit={handleSubmit}>
+//               <div>
+//                 <label
+//                   htmlFor="email"
+//                   className="block text-sm font-medium text-foreground mb-2"
+//                 >
+//                   Email address
+//                 </label>
+//                 <div className="relative">
+//                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+//                   <input
+//                     id="email"
+//                     type="email"
+//                     required
+//                     className="pl-10 w-full px-3 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
+//                     placeholder="Enter your email"
+//                     value={email}
+//                     onChange={(e) => setEmail(e.target.value)}
+//                   />
+//                 </div>
+//               </div>
+
+//               {error && (
+//                 <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+//                   <p className="text-destructive text-sm">
+//                     {getErrorMessage(error)}
+//                   </p>
+//                 </div>
+//               )}
+
+//               <button
+//                 type="submit"
+//                 disabled={isLoading}
+//                 className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+//               >
+//                 {isLoading ? (
+//                   <>
+//                     <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
+//                     Sending...
+//                   </>
+//                 ) : (
+//                   "Send reset link"
+//                 )}
+//               </button>
+
+//               <div className="text-center">
+//                 <button
+//                   type="button"
+//                   className="text-primary hover:text-primary/80 font-medium"
+//                   onClick={() => setShowForgotPassword(false)}
+//                 >
+//                   Back to sign in
+//                 </button>
+//               </div>
+//             </form>
+//           )}
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className="min-h-screen flex items-center justify-center bg-background">
+//       <div className="absolute top-4 right-4">
+//         <ThemeToggle />
+//       </div>
+//       <div className="max-w-md w-full space-y-8 bg-card p-8 rounded-xl shadow-lg border">
+//         <div className="text-center">
+//           <div className="mx-auto h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center">
+//             <User className="h-6 w-6 text-primary" />
+//           </div>
+//           <h2 className="mt-4 text-2xl font-bold text-foreground">
+//             {isSignUp ? "Create your account" : "Welcome back"}
+//           </h2>
+//           <p className="mt-2 text-sm text-muted-foreground">
+//             {isSignUp
+//               ? "Sign up to start chatting with AI"
+//               : "Sign in to continue your conversations"}
+//           </p>
+//         </div>
+
+//         <form className="space-y-6" onSubmit={handleSubmit}>
+//           <div>
+//             <label
+//               htmlFor="email"
+//               className="block text-sm font-medium text-foreground mb-2"
+//             >
+//               Email address
+//             </label>
+//             <div className="relative">
+//               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+//               <input
+//                 id="email"
+//                 type="email"
+//                 required
+//                 className="pl-10 w-full px-3 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
+//                 placeholder="Enter your email"
+//                 value={email}
+//                 onChange={(e) => setEmail(e.target.value)}
+//               />
+//             </div>
+//           </div>
+
+//           <div>
+//             <label
+//               htmlFor="password"
+//               className="block text-sm font-medium text-foreground mb-2"
+//             >
+//               Password
+//             </label>
+//             <div className="relative">
+//               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+//               <input
+//                 id="password"
+//                 type={showPassword ? "text" : "password"}
+//                 required
+//                 className="pl-10 pr-10 w-full px-3 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
+//                 placeholder="Enter your password"
+//                 value={password}
+//                 onChange={(e) => setPassword(e.target.value)}
+//               />
+//               <button
+//                 type="button"
+//                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+//                 onClick={() => setShowPassword(!showPassword)}
+//               >
+//                 {showPassword ? (
+//                   <EyeOff className="h-5 w-5" />
+//                 ) : (
+//                   <Eye className="h-5 w-5" />
+//                 )}
+//               </button>
+//             </div>
+//           </div>
+
+//           {!isSignUp && (
+//             <div className="flex items-center justify-between">
+//               <div className="flex items-center">
+//                 <input
+//                   id="remember-me"
+//                   type="checkbox"
+//                   className="h-4 w-4 text-primary focus:ring-primary border-input rounded"
+//                   checked={rememberMe}
+//                   onChange={(e) => setRememberMe(e.target.checked)}
+//                 />
+//                 <label
+//                   htmlFor="remember-me"
+//                   className="ml-2 block text-sm text-foreground"
+//                 >
+//                   Remember me
+//                 </label>
+//               </div>
+//               <button
+//                 type="button"
+//                 className="text-sm text-primary hover:text-primary/80"
+//                 onClick={() => setShowForgotPassword(true)}
+//               >
+//                 Forgot password?
+//               </button>
+//             </div>
+//           )}
+
+//           {error && (
+//             <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+//               <p className="text-destructive text-sm">
+//                 {getErrorMessage(error)}
+//               </p>
+//             </div>
+//           )}
+
+//           <button
+//             type="submit"
+//             disabled={isLoading}
+//             className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+//           >
+//             {isLoading ? (
+//               <>
+//                 <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
+//                 {isSignUp ? "Creating account..." : "Signing in..."}
+//               </>
+//             ) : isSignUp ? (
+//               "Create account"
+//             ) : (
+//               "Sign in"
+//             )}
+//           </button>
+
+//           <div className="text-center">
+//             <button
+//               type="button"
+//               className="text-primary hover:text-primary/80 font-medium"
+//               onClick={() => setIsSignUp(!isSignUp)}
+//             >
+//               {isSignUp
+//                 ? "Already have an account? Sign in"
+//                 : "Don't have an account? Sign up"}
+//             </button>
+//           </div>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
 "use client";
 
 import type React from "react";
 import { useState } from "react";
-import {
-  useSignInEmailPassword,
-  useSignUpEmailPassword,
-  useResetPassword,
-} from "@nhost/react";
+import { useSignInEmailPassword, useSignUpEmailPassword } from "@nhost/react";
 import { Eye, EyeOff, Loader2, Mail, Lock, User } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -129,30 +440,21 @@ export function AuthForm() {
     isLoading: isSigningUp,
     error: signUpError,
   } = useSignUpEmailPassword();
-  const {
-    resetPassword,
-    isLoading: isResetting,
-    error: resetError,
-    isSuccess: resetSuccess,
-  } = useResetPassword();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (showForgotPassword) {
-      await resetPassword(email);
-      return;
-    }
-
     if (isSignUp) {
       await signUpEmailPassword(email, password);
     } else {
-      await signInEmailPassword(email, password, { rememberMe });
+      // The `signInEmailPassword` function only takes email and password.
+      // Session persistence ("Remember Me") is handled by Nhost's client configuration.
+      await signInEmailPassword(email, password);
     }
   };
 
-  const isLoading = isSigningIn || isSigningUp || isResetting;
-  const error = signInError || signUpError || resetError;
+  const isLoading = isSigningIn || isSigningUp;
+  const error = signInError || signUpError;
 
   const getErrorMessage = (error: any) => {
     if (!error) return null;
@@ -175,103 +477,6 @@ export function AuthForm() {
 
     return message;
   };
-
-  if (showForgotPassword) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="absolute top-4 right-4">
-          <ThemeToggle />
-        </div>
-        <div className="max-w-md w-full space-y-8 bg-card p-8 rounded-xl shadow-lg border">
-          <div className="text-center">
-            <div className="mx-auto h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center">
-              <Mail className="h-6 w-6 text-primary" />
-            </div>
-            <h2 className="mt-4 text-2xl font-bold text-foreground">
-              Reset your password
-            </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Enter your email address and we'll send you a link to reset your
-              password.
-            </p>
-          </div>
-
-          {resetSuccess ? (
-            <div className="text-center space-y-4">
-              <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                <p className="text-green-800 dark:text-green-200">
-                  Password reset email sent! Check your inbox.
-                </p>
-              </div>
-              <button
-                type="button"
-                className="text-primary hover:text-primary/80 font-medium"
-                onClick={() => setShowForgotPassword(false)}
-              >
-                Back to sign in
-              </button>
-            </div>
-          ) : (
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-foreground mb-2"
-                >
-                  Email address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    className="pl-10 w-full px-3 py-3 bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              {error && (
-                <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-                  <p className="text-destructive text-sm">
-                    {getErrorMessage(error)}
-                  </p>
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
-                    Sending...
-                  </>
-                ) : (
-                  "Send reset link"
-                )}
-              </button>
-
-              <div className="text-center">
-                <button
-                  type="button"
-                  className="text-primary hover:text-primary/80 font-medium"
-                  onClick={() => setShowForgotPassword(false)}
-                >
-                  Back to sign in
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -348,29 +553,20 @@ export function AuthForm() {
           </div>
 
           {!isSignUp && (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-primary focus:ring-primary border-input rounded"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-foreground"
-                >
-                  Remember me
-                </label>
-              </div>
-              <button
-                type="button"
-                className="text-sm text-primary hover:text-primary/80"
-                onClick={() => setShowForgotPassword(true)}
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-primary focus:ring-primary border-input rounded"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <label
+                htmlFor="remember-me"
+                className="ml-2 block text-sm text-foreground"
               >
-                Forgot password?
-              </button>
+                Remember me
+              </label>
             </div>
           )}
 
