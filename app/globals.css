@@ -747,3 +747,46 @@
 .typing-dot:nth-child(3) {
   animation-delay: 0.4s;
 }
+@layer components {
+  .spotlight-btn {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spotlight-btn::before {
+    content: "";
+    position: absolute;
+    left: var(--mouse-x);
+    top: var(--mouse-y);
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .dark .spotlight-btn::before {
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 70%
+    );
+  }
+
+  .spotlight-btn:hover::before {
+    opacity: 1;
+  }
+}
+@keyframes width-full {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

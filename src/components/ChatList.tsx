@@ -1621,45 +1621,63 @@ export function ChatList({ selectedChatId, onSelectChat }: ChatListProps) {
       <div className="p-4 border-b border-sidebar-border/50 flex-shrink-0">
         <button
           onClick={() => setIsCreating(true)}
-          className="w-full flex items-center justify-center px-4 py-3 bg-gradient-to-r from-sidebar-primary to-sidebar-primary/80 text-sidebar-primary-foreground rounded-xl hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] font-medium group hover:shadow-sidebar-primary/30"
+          className="w-full relative group flex items-center justify-center px-4 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white rounded-xl hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] font-medium overflow-hidden transform hover:-translate-y-0.5"
         >
-          <Plus className="w-4 h-4 mr-2 group-hover:rotate-90 transition-transform duration-200" />
-          New Chat
+          {/* Animated background shimmer */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
+
+          {/* Floating particles effect */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <div className="absolute top-2 left-6 w-1 h-1 bg-white/60 rounded-full animate-pulse delay-100" />
+            <div className="absolute top-4 right-8 w-0.5 h-0.5 bg-white/40 rounded-full animate-pulse delay-300" />
+            <div className="absolute bottom-3 left-12 w-0.5 h-0.5 bg-white/50 rounded-full animate-pulse delay-500" />
+          </div>
+
+          <Plus className="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-300 z-10 relative" />
+          <span className="relative z-10">New Chat</span>
         </button>
       </div>
 
       {/* Search */}
       <div className="p-4 border-b border-sidebar-border/50 flex-shrink-0">
         <div className="relative group">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground group-hover:text-sidebar-primary transition-colors duration-300" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground group-hover:text-cyan-500 transition-all duration-300 group-hover:scale-110" />
           <input
             type="text"
             placeholder="Search chats..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-sidebar-accent/50 border border-sidebar-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sidebar-primary/50 focus:border-sidebar-primary transition-all duration-200 hover:bg-sidebar-accent/70 hover:shadow-lg hover:shadow-sidebar-primary/10"
+            className="w-full pl-10 pr-4 py-2.5 bg-sidebar-accent/50 border border-sidebar-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400 transition-all duration-300 hover:bg-sidebar-accent/70 hover:shadow-xl hover:shadow-cyan-500/10 focus:shadow-xl focus:shadow-cyan-500/20 hover:border-cyan-300/50"
           />
+          {/* Animated search glow */}
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-400/0 via-cyan-400/10 to-cyan-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
         </div>
       </div>
 
       {/* Create Chat Form */}
       {isCreating && (
-        <div className="p-4 border-b border-sidebar-border/50 bg-sidebar-accent/30 animate-in slide-in-from-top-2 duration-300 flex-shrink-0">
+        <div className="p-4 border-b border-sidebar-border/50 bg-gradient-to-br from-sidebar-accent/30 to-sidebar-primary/10 animate-in slide-in-from-top-2 duration-300 flex-shrink-0 backdrop-blur-sm">
           <form onSubmit={handleCreateChat} className="space-y-3">
-            <input
-              type="text"
-              placeholder="Enter chat title..."
-              value={newChatTitle}
-              onChange={(e) => setNewChatTitle(e.target.value)}
-              className="w-full px-3 py-2.5 bg-sidebar-background border border-sidebar-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sidebar-primary/50 transition-all duration-200"
-              autoFocus
-            />
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Enter chat title..."
+                value={newChatTitle}
+                onChange={(e) => setNewChatTitle(e.target.value)}
+                className="w-full px-3 py-2.5 bg-sidebar-background/80 backdrop-blur-sm border border-sidebar-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:border-emerald-400 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 focus:shadow-xl focus:shadow-emerald-500/20"
+                autoFocus
+              />
+              {/* Input glow effect */}
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-400/0 via-emerald-400/5 to-emerald-400/0 opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            </div>
             <div className="flex space-x-2">
               <button
                 type="submit"
-                className="flex-1 px-3 py-2 bg-sidebar-primary text-sidebar-primary-foreground text-sm rounded-lg hover:bg-sidebar-primary/90 transition-all duration-200 hover:scale-105 active:scale-95"
+                className="flex-1 relative group px-3 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white text-sm rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-emerald-500/30 font-medium overflow-hidden"
               >
-                Create
+                {/* Button shimmer effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
+                <span className="relative z-10">Create</span>
               </button>
               <button
                 type="button"
@@ -1667,9 +1685,11 @@ export function ChatList({ selectedChatId, onSelectChat }: ChatListProps) {
                   setIsCreating(false);
                   setNewChatTitle("");
                 }}
-                className="flex-1 px-3 py-2 bg-sidebar-accent text-sidebar-accent-foreground text-sm rounded-lg hover:bg-sidebar-accent/80 transition-all duration-200"
+                className="flex-1 relative group px-3 py-2.5 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-400 hover:to-gray-500 text-white text-sm rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-gray-500/30 font-medium overflow-hidden"
               >
-                Cancel
+                {/* Button shimmer effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
+                <span className="relative z-10">Cancel</span>
               </button>
             </div>
           </form>
@@ -1682,8 +1702,8 @@ export function ChatList({ selectedChatId, onSelectChat }: ChatListProps) {
           <div className="flex items-center justify-center p-8">
             <div className="flex items-center space-x-3 text-muted-foreground">
               <div className="relative">
-                <Loader2 className="h-5 w-5 animate-spin" />
-                <div className="absolute inset-0 h-5 w-5 animate-ping rounded-full bg-sidebar-primary/20"></div>
+                <Loader2 className="h-5 w-5 animate-spin text-cyan-500" />
+                <div className="absolute inset-0 h-5 w-5 animate-ping rounded-full bg-cyan-500/30"></div>
               </div>
               <span className="text-sm font-medium">Loading chats...</span>
             </div>
@@ -1691,10 +1711,13 @@ export function ChatList({ selectedChatId, onSelectChat }: ChatListProps) {
         ) : filteredChats.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-8 text-center">
             <div className="relative mb-4">
-              <div className="h-16 w-16 bg-gradient-to-br from-sidebar-primary/20 to-sidebar-accent/20 rounded-2xl flex items-center justify-center backdrop-blur-xl border border-sidebar-primary/20">
-                <MessageCircle className="h-8 w-8 text-sidebar-primary" />
+              <div className="h-16 w-16 bg-gradient-to-br from-violet-500/20 via-indigo-500/20 to-cyan-500/20 rounded-2xl flex items-center justify-center backdrop-blur-xl border border-violet-400/20 shadow-xl shadow-violet-500/10">
+                <MessageCircle className="h-8 w-8 text-violet-500" />
               </div>
-              <Sparkles className="absolute -top-1 -right-1 h-5 w-5 text-sidebar-primary animate-pulse" />
+              <Sparkles className="absolute -top-1 -right-1 h-5 w-5 text-amber-400 animate-pulse" />
+              {/* Floating sparkles */}
+              <div className="absolute -top-2 -left-2 h-2 w-2 bg-pink-400 rounded-full animate-bounce delay-300" />
+              <div className="absolute -bottom-1 -left-1 h-1.5 w-1.5 bg-blue-400 rounded-full animate-bounce delay-700" />
             </div>
             <p className="text-sm font-medium text-sidebar-foreground mb-1">
               {searchQuery ? "No chats found" : "No chats yet"}
@@ -1710,22 +1733,22 @@ export function ChatList({ selectedChatId, onSelectChat }: ChatListProps) {
             {renderChatGroup(
               "Today",
               groupedChats.today,
-              <Calendar className="h-3 w-3" />
+              <Calendar className="h-3 w-3 text-emerald-500" />
             )}
             {renderChatGroup(
               "Yesterday",
               groupedChats.yesterday,
-              <Calendar className="h-3 w-3" />
+              <Calendar className="h-3 w-3 text-amber-500" />
             )}
             {renderChatGroup(
               "This Week",
               groupedChats.thisWeek,
-              <Calendar className="h-3 w-3" />
+              <Calendar className="h-3 w-3 text-violet-500" />
             )}
             {renderChatGroup(
               "Older",
               groupedChats.older,
-              <Calendar className="h-3 w-3" />
+              <Calendar className="h-3 w-3 text-gray-500" />
             )}
           </div>
         )}
@@ -1764,34 +1787,46 @@ function ChatItem({
     <div
       className={`group mx-2 mb-1 rounded-xl transition-all duration-300 chat-item-hover animate-in slide-in-from-left-2 relative overflow-hidden ${
         selectedChatId === chat.id
-          ? "bg-gradient-to-r from-sidebar-primary/20 to-sidebar-accent/30 border-2 border-sidebar-primary/50 shadow-lg shadow-sidebar-primary/20"
-          : "hover:bg-gradient-to-r hover:from-sidebar-accent/30 hover:to-sidebar-primary/10 border-2 border-transparent hover:border-sidebar-primary/20"
+          ? "bg-gradient-to-r from-violet-500/20 via-indigo-500/20 to-cyan-500/20 border-2 border-violet-400/50 shadow-xl shadow-violet-500/20"
+          : "hover:bg-gradient-to-r hover:from-sidebar-accent/40 hover:via-violet-500/10 hover:to-cyan-500/10 border-2 border-transparent hover:border-violet-400/30 hover:shadow-lg hover:shadow-violet-500/10"
       }`}
       style={{ animationDelay: `${index * 50}ms` }}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-sidebar-primary/5 to-sidebar-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 floating-bg"></div>
+      {/* Enhanced floating background with multiple gradients */}
+      <div className="absolute inset-0 bg-gradient-to-r from-violet-500/5 via-indigo-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 floating-bg"></div>
+
+      {/* Shimmer effect on hover */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
 
       {editingChatId === chat.id ? (
         <div className="p-3 space-y-3 relative z-10">
-          <input
-            type="text"
-            value={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
-            className="w-full px-3 py-2 text-sm bg-sidebar-background/80 backdrop-blur-sm border border-sidebar-border rounded-lg focus:outline-none focus:ring-2 focus:ring-sidebar-primary/50 transition-all duration-300 focus:shadow-lg hover-glow"
-            autoFocus
-          />
+          <div className="relative">
+            <input
+              type="text"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-sidebar-background/90 backdrop-blur-sm border border-sidebar-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400 transition-all duration-300 focus:shadow-xl hover-glow hover:shadow-blue-500/20"
+              autoFocus
+            />
+            {/* Input focus glow */}
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-400/0 via-blue-400/10 to-blue-400/0 opacity-0 focus-within:opacity-100 transition-opacity duration-300 pointer-events-none" />
+          </div>
           <div className="flex space-x-2">
             <button
               onClick={onSaveEdit}
-              className="p-2 text-green-400 hover:text-green-300 hover:bg-green-500/20 rounded-lg transition-all duration-300 hover:scale-110 hover-glow"
+              className="group/btn p-2.5 text-emerald-400 hover:text-white hover:bg-gradient-to-r hover:from-emerald-500 hover:to-teal-500 rounded-lg transition-all duration-300 hover:scale-110 hover-glow hover:shadow-lg hover:shadow-emerald-500/30 relative overflow-hidden"
             >
-              <Check className="w-4 h-4" />
+              {/* Button shimmer */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-500" />
+              <Check className="w-4 h-4 relative z-10" />
             </button>
             <button
               onClick={onCancelEdit}
-              className="p-2 text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 rounded-lg transition-all duration-300 hover:scale-110"
+              className="group/btn p-2.5 text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-gray-500 hover:to-gray-600 rounded-lg transition-all duration-300 hover:scale-110 relative overflow-hidden hover:shadow-lg hover:shadow-gray-500/30"
             >
-              <X className="w-4 h-4" />
+              {/* Button shimmer */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-500" />
+              <X className="w-4 h-4 relative z-10" />
             </button>
           </div>
         </div>
@@ -1799,25 +1834,26 @@ function ChatItem({
         <div className="flex items-center relative z-10 min-h-0">
           <div
             onClick={() => onSelectChat(chat.id)}
-            className="flex-1 p-3 cursor-pointer min-w-0 pr-20"
+            className="flex-1 p-3 cursor-pointer min-w-0 pr-20 group/content"
           >
-            <h3 className="font-medium text-sidebar-foreground truncate mb-1 text-sm group-hover:text-sidebar-primary transition-colors duration-300 relative z-20">
+            <h3 className="font-medium text-sidebar-foreground truncate mb-1 text-sm group-hover:text-violet-400 transition-colors duration-300 relative z-20">
               {chat.title}
             </h3>
             {chat.messages[0] && (
-              /* Fixed message preview overflow with better truncation and z-index */
               <p className="text-xs text-muted-foreground leading-relaxed max-w-full overflow-hidden text-ellipsis whitespace-nowrap relative z-20">
                 <span
-                  className={`inline-block w-2 h-2 rounded-full mr-2 flex-shrink-0 ${
+                  className={`inline-block w-2 h-2 rounded-full mr-2 flex-shrink-0 transition-all duration-300 ${
                     chat.messages[0].role === "user"
-                      ? "bg-gradient-to-r from-green-400 to-emerald-500"
-                      : "bg-gradient-to-r from-blue-400 to-cyan-500"
-                  }`}
+                      ? "bg-gradient-to-r from-emerald-400 to-teal-500 group-hover:shadow-lg group-hover:shadow-emerald-400/50"
+                      : "bg-gradient-to-r from-blue-400 to-cyan-500 group-hover:shadow-lg group-hover:shadow-blue-400/50"
+                  } group-hover:scale-125`}
                 ></span>
-                <span className="truncate">{chat.messages[0].content}</span>
+                <span className="truncate group-hover/content:text-violet-300 transition-colors duration-300">
+                  {chat.messages[0].content}
+                </span>
               </p>
             )}
-            <p className="text-xs text-muted-foreground/70 mt-1.5 group-hover:text-sidebar-primary/70 transition-colors duration-300 relative z-20">
+            <p className="text-xs text-muted-foreground/70 mt-1.5 group-hover:text-violet-400/70 transition-colors duration-300 relative z-20">
               {new Date(chat.created_at).toLocaleDateString()}
             </p>
           </div>
@@ -1827,20 +1863,22 @@ function ChatItem({
                 e.stopPropagation();
                 onStartEdit(chat.id, chat.title);
               }}
-              className="p-2 text-muted-foreground hover:text-sidebar-primary hover:bg-sidebar-primary/20 rounded-md transition-all duration-300 hover:scale-110 hover-glow"
+              className="group/edit p-2 text-muted-foreground hover:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 rounded-md transition-all duration-300 hover:scale-110 hover-glow relative overflow-hidden hover:shadow-lg hover:shadow-blue-500/30"
               title="Edit chat title"
             >
-              <Edit3 className="w-4 h-4" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/edit:translate-x-full transition-transform duration-500" />
+              <Edit3 className="w-4 h-4 relative z-10" />
             </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onDeleteChat(chat.id);
               }}
-              className="p-2 text-muted-foreground hover:text-red-400 hover:bg-red-500/20 rounded-md transition-all duration-300 hover:scale-110 hover-glow"
+              className="group/delete p-2 text-muted-foreground hover:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-pink-500 rounded-md transition-all duration-300 hover:scale-110 hover-glow relative overflow-hidden hover:shadow-lg hover:shadow-red-500/30"
               title="Delete chat"
             >
-              <Trash2 className="w-4 h-4" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/delete:translate-x-full transition-transform duration-500" />
+              <Trash2 className="w-4 h-4 relative z-10" />
             </button>
           </div>
         </div>
