@@ -734,7 +734,7 @@ export function AuthForm() {
                 </motion.div>
                 <div className="flex flex-col">
                   <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 tracking-wide">
-                    Updated to Netlify:
+                    Netlify Link:
                   </span>
                   <motion.a
                     href="https://nhost-n8n-hasura-chatbot.netlify.app/"
@@ -743,7 +743,7 @@ export function AuthForm() {
                     className="text-sm font-medium bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-purple-600 hover:to-blue-600 transition-all duration-300 relative"
                     whileHover={{ scale: 1.02 }}
                   >
-                    Authenticate There
+                    Check Out
                     <motion.div
                       className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600"
                       initial={{ width: 0 }}
