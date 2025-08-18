@@ -675,6 +675,8 @@ export function AuthForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
 
   const {
     signInEmailPassword,
@@ -690,7 +692,11 @@ export function AuthForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSignUp) {
-      await signUpEmailPassword(email, password);
+      const result = await signUpEmailPassword(email, password);
+      if (!signUpError && result) {
+        setUserEmail(email);
+        setShowEmailVerification(true);
+      }
     } else {
       await signInEmailPassword(email, password);
     }
@@ -768,103 +774,281 @@ export function AuthForm() {
               <User className="h-8 w-8 text-primary" />
             </div>
             <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              {isSignUp ? "Create an Account" : "Welcome Back"}
+              {showEmailVerification
+                ? "Check Your Email!"
+                : isSignUp
+                ? "Create an Account"
+                : "Welcome Back"}
             </h1>
             <p className="mt-2 text-muted-foreground">
-              {isSignUp
+              {showEmailVerification
+                ? "We've sent you a verification link"
+                : isSignUp
                 ? "Join to start your AI journey."
                 : "Sign in to continue."}
             </p>
           </div>
 
           <AnimatePresence mode="wait">
-            <motion.form
-              key={isSignUp ? "signup" : "signin"}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={formVariants}
-              transition={{ duration: 0.3 }}
-              className="space-y-4"
-              onSubmit={handleSubmit}
-            >
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-muted-foreground mb-1"
-                >
-                  Email
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-                  <input
-                    id="email"
-                    type="email"
-                    required
-                    className="w-full rounded-md border border-input bg-transparent pl-10 pr-4 py-2.5 transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-muted-foreground mb-1"
-                >
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-                  <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    required
-                    className="w-full rounded-md border border-input bg-transparent pl-10 pr-10 py-2.5 transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {error && (
-                <p className="text-sm text-red-500">{getErrorMessage(error)}</p>
-              )}
-
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                disabled={isLoading}
-                className="w-full flex items-center justify-center rounded-md bg-primary px-4 py-2.5 font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50"
+            {showEmailVerification ? (
+              <motion.div
+                key="email-verification"
+                initial={{ opacity: 0, scale: 0.8, rotateY: -90 }}
+                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                exit={{ opacity: 0, scale: 0.8, rotateY: 90 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+                className="space-y-6 text-center"
               >
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {isSignUp ? "Create Account" : "Sign In"}
-              </motion.button>
-            </motion.form>
+                <motion.div
+                  initial={{ y: -20 }}
+                  animate={{ y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  className="relative"
+                >
+                  <div className="mx-auto mb-6 relative">
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        rotate: [0, 5, -5, 0],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                      }}
+                      className="h-20 w-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl mx-auto"
+                    >
+                      <Mail className="h-10 w-10 text-white" />
+                    </motion.div>
+
+                    {/* Floating particles around the mail icon */}
+                    {[...Array(6)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute w-2 h-2 bg-blue-400 rounded-full"
+                        style={{
+                          top: `${20 + Math.sin(i) * 30}%`,
+                          left: `${20 + Math.cos(i) * 30}%`,
+                        }}
+                        animate={{
+                          y: [0, -10, 0],
+                          opacity: [0.4, 1, 0.4],
+                          scale: [0.8, 1.2, 0.8],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          delay: i * 0.3,
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.5 }}
+                    className="text-muted-foreground mb-4"
+                  >
+                    We've sent a verification link to:
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6, duration: 0.5 }}
+                    className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border border-blue-200 dark:border-blue-800 rounded-lg px-4 py-3 mb-6"
+                  >
+                    <span className="font-semibold text-blue-700 dark:text-blue-300">
+                      {userEmail}
+                    </span>
+                  </motion.div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.5 }}
+                  className="space-y-4"
+                >
+                  <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <motion.div
+                        animate={{ rotate: [0, 10, -10, 0] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          repeatDelay: 1,
+                        }}
+                        className="text-2xl"
+                      >
+                        🚨
+                      </motion.div>
+                      <span className="font-semibold text-amber-800 dark:text-amber-200">
+                        Don't Forget to Check Spam!
+                      </span>
+                    </div>
+                    <p className="text-sm text-amber-700 dark:text-amber-300">
+                      Sometimes our emails get lost in the spam folder. Please
+                      check your <strong>Spam/Junk</strong> folder if you don't
+                      see the email in your inbox.
+                    </p>
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setShowEmailVerification(false);
+                      setIsSignUp(false);
+                      setEmail("");
+                      setPassword("");
+                    }}
+                    className="w-full flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3 font-semibold text-white shadow-lg transition-all hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  >
+                    <motion.div
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      ←
+                    </motion.div>
+                    Back to Sign In
+                  </motion.button>
+
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1, duration: 0.5 }}
+                    className="text-xs text-muted-foreground"
+                  >
+                    <motion.span
+                      animate={{ opacity: [0.5, 1, 0.5] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      💡 Tip: Add our domain to your contacts to avoid future
+                      delivery issues
+                    </motion.span>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+            ) : (
+              <motion.form
+                key={isSignUp ? "signup" : "signin"}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={formVariants}
+                transition={{ duration: 0.3 }}
+                className="space-y-4"
+                onSubmit={handleSubmit}
+              >
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-muted-foreground mb-1"
+                  >
+                    Email
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                    <input
+                      id="email"
+                      type="email"
+                      required
+                      className="w-full rounded-md border border-input bg-transparent pl-10 pr-4 py-2.5 transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-muted-foreground mb-1"
+                  >
+                    Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      required
+                      className="w-full rounded-md border border-input bg-transparent pl-10 pr-10 py-2.5 transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {error && (
+                  <p className="text-sm text-red-500">
+                    {getErrorMessage(error)}
+                  </p>
+                )}
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full flex items-center justify-center rounded-md bg-primary px-4 py-2.5 font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50"
+                >
+                  {isLoading && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  {isSignUp ? "Create Account" : "Sign In"}
+                </motion.button>
+              </motion.form>
+            )}
           </AnimatePresence>
 
           <p className="text-center text-sm text-muted-foreground">
-            {isSignUp ? "Already have an account? " : "Don't have an account? "}
-            <button
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="font-semibold text-primary hover:underline"
-            >
-              {isSignUp ? "Sign In" : "Sign Up"}
-            </button>
+            {showEmailVerification ? (
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                Didn't receive an email?{" "}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    // Here you could trigger resend email functionality
+                    console.log("Resend email to:", userEmail);
+                  }}
+                  className="font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 hover:underline"
+                >
+                  Resend verification
+                </motion.button>
+              </motion.span>
+            ) : (
+              <>
+                {isSignUp
+                  ? "Already have an account? "
+                  : "Don't have an account? "}
+                <button
+                  onClick={() => setIsSignUp(!isSignUp)}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  {isSignUp ? "Sign In" : "Sign Up"}
+                </button>
+              </>
+            )}
           </p>
         </motion.div>
       </div>
