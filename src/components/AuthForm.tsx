@@ -696,10 +696,26 @@ export function AuthForm() {
     <div className="flex min-h-screen font-sans">
       {/* Left Panel: Form */}
       <div className="relative flex flex-col items-center justify-center w-full lg:w-1/2 bg-background p-8">
-        {/* --- FIX: Added z-index to this container --- */}
+        {/* Netlify Deployment Link */}
+        <div className="absolute top-4 left-4 z-50">
+          <p className="text-sm text-muted-foreground">
+            Here you can find it Deployed on netlify too:{" "}
+            <a
+              href="https://nhost-n8n-hasura-chatbot.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              https://nhost-n8n-hasura-chatbot.netlify.app/
+            </a>
+          </p>
+        </div>
+
+        {/* Theme Toggle */}
         <div className="absolute top-4 right-4 z-50">
           <ThemeToggle />
         </div>
+
         <motion.div
           initial="hidden"
           animate="visible"
