@@ -616,7 +616,16 @@
 import { useState, useEffect } from "react";
 import type React from "react";
 import { useSignInEmailPassword, useSignUpEmailPassword } from "@nhost/react";
-import { Eye, EyeOff, Loader2, Mail, Lock, User, Bot } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+  Mail,
+  Lock,
+  User,
+  Bot,
+  ExternalLink,
+} from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -696,20 +705,51 @@ export function AuthForm() {
     <div className="flex min-h-screen font-sans">
       {/* Left Panel: Form */}
       <div className="relative flex flex-col items-center justify-center w-full lg:w-1/2 bg-background p-8">
-        {/* Netlify Deployment Link */}
-        <div className="absolute top-4 left-4 z-50">
-          <p className="text-sm text-muted-foreground">
-            Here you can find it Deployed on netlify too:{" "}
-            <a
-              href="https://nhost-n8n-hasura-chatbot.netlify.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              https://nhost-n8n-hasura-chatbot.netlify.app/
-            </a>
-          </p>
-        </div>
+        {/* Enhanced Netlify Deployment Link */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="absolute top-4 left-4 z-50"
+        >
+          <motion.div
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            className="group relative"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-lg blur-sm transition-all duration-300 group-hover:blur-md group-hover:scale-110" />
+            <div className="relative bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2 shadow-lg backdrop-blur-sm">
+              <div className="flex items-center gap-2">
+                <motion.div
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                >
+                  <ExternalLink className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                </motion.div>
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 tracking-wide">
+                    Netlify Link:
+                  </span>
+                  <motion.a
+                    href="https://nhost-n8n-hasura-chatbot.netlify.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-purple-600 hover:to-blue-600 transition-all duration-300 relative"
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    View Live Demo
+                    <motion.div
+                      className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600"
+                      initial={{ width: 0 }}
+                      whileHover={{ width: "100%" }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </motion.a>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
 
         {/* Theme Toggle */}
         <div className="absolute top-4 right-4 z-50">
